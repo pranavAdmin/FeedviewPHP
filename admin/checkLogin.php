@@ -2,18 +2,22 @@
 
 	include_once 'include/class/class.query.php';
 	error_reporting(E_ALL);
-	$username=$_REQUEST['username'];
-	$passwrd=$_REQUEST['password'];
-	
 	$table=new query();
+	
+	$username=$table->filterData($_REQUEST['username']);
+	$passwrd=$table->filterData($_REQUEST['password']);
+	
 	$rows=$table->select("user","name='".$username."' and password='".md5($passwrd)."'");
-	print_r($rows); die();
 	$Tarr=array();
-	foreach ($rows as $row){
-		$Tarr[]=array("id"=>(int)$row['id'],"name"=>$row['name'],"image"=>str_replace("localhost", "10.0.2.2", $table->ImageTagRemove($row['profile_image'])),"status"=>$table->filterData($row["description"]),"profilePic"=>str_replace("localhost", "10.0.2.2", $table->ImageTagRemove($row['profile_image'])),"timeStamp"=>strtotime($row["timestamp"]),"url"=>"");
-		//$Tarr[]=array("id"=>(int)$row['id'],"name"=>$row['name'],"image"=>"http://api.androidhive.info/feed/img/cosmos.jpg","status"=>$table->filterData($row["description"]),"profilePic"=>"http://api.androidhive.info/feed/img/cosmos.jpg","timeStamp"=>(string)strtotime($row["timestamp"]),"url"=>"");
+	if (is_array($rows) && count($rows)>0){
+		foreach ($rows as $row){
+			$Tarr[]=array("id"=>$row['id'],"name"=>$row['name'],"password"=>$row['password'],"added_date"=>$row['added_date'],"status"=>(String)$row['status']);
+		}
+		$arr=array("success"=>$Tarr);
 	}
-	$arr=array("feed"=>$Tarr);
+	else {
+		$arr=array("fail"=>array("No data found"));
+	}
 	header("Content-Type: application/json");
 	echo json_encode($arr);
 	die;
