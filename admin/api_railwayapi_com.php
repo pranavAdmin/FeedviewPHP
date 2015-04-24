@@ -1,6 +1,7 @@
 <?php
 $api_key="20238";
 
+$apiInUse=$_REQUEST['api'];
 
 $requestTrainName=$_REQUEST['trainName'];
 $requestTrainNo=$_REQUEST['trainNo'];
@@ -14,6 +15,8 @@ $requestDOJ=$_REQUEST['DOJ'];
 $requestPNR=$_REQUEST['pnr'];
 $requestSeatNo=$_REQUEST['seatno'];
 
+$requestSourceStation=$_REQUEST['SourceStation'];
+$requestDestinationStation=$_REQUEST['DestinationStation'];
 
 $url="http://api.railwayapi.com/";
 
@@ -30,10 +33,31 @@ $trainName="http://api.railwayapi.com/name_number/train/bhopal/apikey/20238/";
 $stationName="http://api.railwayapi.com/name_to_code/station/luckn/apikey/20238/";
 $stationCode="http://api.railwayapi.com/code_to_name/code/gkp/apikey/20238/";
 
-
-$getFare=$url."fare/train/"
-
+$getFare=$url."fare/train/".$requestTrainNo."/source/".$requestSourceStation."/dest/ndls/age".$requestAge."quote/PT/doj/".$requestDOJ."/apikey/".$api_key;
 
 
+
+
+function validateParam($api,$params){
+	switch (strtoupper($api)){
+		case "FARE":
+			return getFare($params);
+			break;
+		case "TRAINARRIVAL":
+			break;	
+		case "TRAINSUGGEST":
+			break;
+		case "PNRSTATUS":
+			break;
+		case "STATIONSUGGEST":
+			break;			
+	}
+	
+}
+function getFare($params){
+	if(is_array($params)){
+			
+	}
+}
 
 ?>
